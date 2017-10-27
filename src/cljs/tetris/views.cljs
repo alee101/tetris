@@ -9,7 +9,7 @@
     :width 1.0
     :stroke "black"
     :stroke-width 0.05
-    :fill (if (game/empty-cell? cell) "black" "white")
+    :fill (game/cell->color cell)
     :x col
     :y row}])
 
