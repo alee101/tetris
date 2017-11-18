@@ -5,18 +5,18 @@
             [tetris.views :as views]
             [tetris.config :as config]))
 
-(def keycode->event
-  {32 [::events/hard-drop]
-   37 [::events/move-left]
-   38 [::events/rotate-clockwise]
-   39 [::events/move-right]
-   40 [::events/move-down]
-   90 [::events/rotate-counter-clockwise]})
+(def keycode->action
+  {32 :hard-drop
+   37 :move-left
+   38 :rotate-clockwise
+   39 :move-right
+   40 :move-down
+   90 :rotate-counter-clockwise})
 
 (defn handle-keydown [e]
-  (when-let [event (keycode->event (.-keyCode e))]
+  (when-let [action (keycode->action (.-keyCode e))]
     (.preventDefault e)
-    (re-frame/dispatch event)))
+    (re-frame/dispatch [::events/move action])))
 
 (defn dev-setup []
   (when config/debug?

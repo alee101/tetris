@@ -84,34 +84,49 @@
        clear-completed-rows
        (assoc (spawn-piece) :board)))
 
-(defn new-game []
-  (merge {:board empty-board :cur-status :in-progress} (spawn-piece)))
-
-(defn move-left [game]
+(defn- move-left [game]
   (update game :col-offset dec))
 
-(defn move-right [game]
+(defn- move-right [game]
   (update game :col-offset inc))
 
-(defn move-down [game]
+(defn- move-down [game]
   (update game :row-offset inc))
 
-(defn rotate-clockwise [game]
+(defn- rotate-clockwise [game]
   (update game :piece (comp transpose flip)))
 
-(defn rotate-counter-clockwise [game]
+(defn- rotate-counter-clockwise [game]
   (update game :piece (comp flip transpose)))
 
-(defn hard-drop [game]
+(defn- hard-drop [game]
   (-> (take-while valid-game? (iterate move-down game))
       last
       lock-piece))
+
+(defn- make-move [game action]
+  ((action {:hard-drop hard-drop
+            :move-left move-left
+            :rotate-clockwise rotate-clockwise
+            :move-right move-right
+            :move-down move-down
+            :rotate-counter-clockwise rotate-counter-clockwise})
+   game))
+
+(defn move-if-valid [game action]
+  (let [new-game-state (make-move game action)]
+    (if (valid-game? new-game-state)
+      new-game-state
+      game)))
 
 (defn gravitate [game]
   (let [new-game-state (move-down game)]
     (if (valid-game? new-game-state)
       new-game-state
       (lock-piece game))))
+
+(defn new-game []
+  (merge {:board empty-board :cur-status :in-progress} (spawn-piece)))
 
 (defn cur-board [game]
   (add-piece-to-board game))

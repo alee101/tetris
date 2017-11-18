@@ -9,34 +9,9 @@
    db/default-db))
 
 (re-frame/reg-event-db
- ::move-down
- (fn [db _]
-   (game/move-down db)))
-
-(re-frame/reg-event-db
- ::move-left
- (fn [db _]
-   (game/move-left db)))
-
-(re-frame/reg-event-db
- ::move-right
- (fn [db _]
-   (game/move-right db)))
-
-(re-frame/reg-event-db
- ::hard-drop
- (fn [db _]
-   (game/hard-drop db)))
-
-(re-frame/reg-event-db
- ::rotate-clockwise
- (fn [db _]
-   (game/rotate-clockwise db)))
-
-(re-frame/reg-event-db
- ::rotate-counter-clockwise
- (fn [db _]
-   (game/rotate-counter-clockwise db)))
+ ::move
+ (fn [db [_ action]]
+   (game/move-if-valid db action)))
 
 (re-frame/reg-event-db
  ::gravitate
