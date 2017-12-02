@@ -11,12 +11,15 @@
    38 :rotate-clockwise
    39 :move-right
    40 :move-down
+   80 :toggle-pause
    90 :rotate-counter-clockwise})
 
 (defn handle-keydown [e]
   (when-let [action (keycode->action (.-keyCode e))]
     (.preventDefault e)
-    (re-frame/dispatch [::events/move action])))
+    (re-frame/dispatch (if (= action :toggle-pause)
+                         [::events/toggle-pause]
+                         [::events/move action]))))
 
 (defn dev-setup []
   (when config/debug?

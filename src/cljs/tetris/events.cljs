@@ -17,3 +17,8 @@
  ::gravitate
  (fn [db _]
    (game/gravitate db)))
+
+(re-frame/reg-event-db
+ ::toggle-pause
+ (fn [db _]
+   (game/toggle-pause db)))
