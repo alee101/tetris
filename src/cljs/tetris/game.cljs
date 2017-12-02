@@ -146,3 +146,6 @@
   (if (valid-game? game)
     (add-piece-to-board game)
     (:board game)))
+
+(defn game-status [game]
+  (:cur-status game))

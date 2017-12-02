@@ -17,6 +17,12 @@
    db/default-db))
 
 (re-frame/reg-event-db
+ ::new-game
+ check-spec-interceptor
+ (fn [_ _]
+   (game/new-game)))
+
+(re-frame/reg-event-db
  ::move
  check-spec-interceptor
  (fn [db [_ action]]

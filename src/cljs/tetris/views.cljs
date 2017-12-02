@@ -1,6 +1,7 @@
 (ns tetris.views
   (:require [re-frame.core :as re-frame]
             [tetris.game :as game]
+            [tetris.events :as events]
             [tetris.subs :as subs]))
 
 (defn cell [row col cell]
@@ -13,7 +14,7 @@
     :x col
     :y row}])
 
-(defn tetris-app []
+(defn board []
   (let [cur-board @(re-frame/subscribe [::subs/cur-board])]
     (into
      [:svg
@@ -23,3 +24,16 @@
      (for [row (range game/board-height)
            col (range game/board-width)]
        [cell row col (get-in cur-board [row col])]))))
+
+(defn game-control []
+  (let [game-status @(re-frame/subscribe [::subs/game-status])]
+    [:div
+     (when (= game-status :game-over)
+       [:button {:on-click #(re-frame/dispatch [::events/new-game])} "New Game"])
+     (when (= game-status :paused)
+       "Game paused. Hit 'p' again to resume.")]))
+
+(defn tetris-app []
+  [:div
+   [board]
+   [game-control]])
